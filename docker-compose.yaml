@@ -1,10 +1,9 @@
 version: "3.9"
 services:
   backend:
-    container_name: "nidus-backend"
     build:
       context: .
-      dockerfile: .dockerfiles/Dockerfile
+      dockerfile: Dockerfile
     ports:
       - "8080:8080"
     volumes:
