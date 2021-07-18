@@ -1,0 +1,14 @@
+version: "3.9"
+services:
+  backend:
+    container_name: "nidus-backend"
+    build:
+      context: .
+      dockerfile: .dockerfiles/Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./backend:/app/backend
+    entrypoint: uvicorn
+    command:
+      ["backend.app:app", "--reload", "--host", "0.0.0.0", "--port", "8080"]
