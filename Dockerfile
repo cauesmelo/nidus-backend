@@ -15,4 +15,4 @@ RUN poetry install --no-root --no-dev
 
 COPY ./backend /app/backend
 
-ENTRYPOINT [ "uvicorn", "backend.app:app", "--reload", "--port", "8080", "--host", "0.0.0.0" ]
+CMD uvicorn backend.app:app --reload --port=$PORT --host=0.0.0.0
