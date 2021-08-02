@@ -8,7 +8,7 @@ from sqlalchemy import insert
 class UserRepository(BaseRepository):
     table = Users
 
-    def insert_user(self, user: UserInsert, preferences: PreferencesInsert) -> UserInsert:
+    def create(self, user: UserInsert, preferences: PreferencesInsert) -> UserInsert:
         preferences_id = self.insert(Preferences, preferences.dict())
         return self.insert(
             self.table,

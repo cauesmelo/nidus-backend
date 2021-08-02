@@ -14,6 +14,6 @@ def test_user_is_correctly_inserted(user_repository: UserRepository) -> None:
         apelido_usuario="apelido_usuario",
     )
 
-    user_id = user_repository.insert_user(user_to_insert, preferences)
+    user_id = user_repository.create(user_to_insert, preferences)
 
     assert isinstance(user_id, int)
