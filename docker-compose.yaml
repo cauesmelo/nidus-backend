@@ -11,3 +11,11 @@ services:
     entrypoint: uvicorn
     command:
       ["backend.app:app", "--reload", "--host", "0.0.0.0", "--port", "8080"]
+  database:
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      - MYSQL_ROOT_PASSWORD=1234
+      - MYSQL_DATABASE=nidus
+    ports:
+      - "3306:3306"
