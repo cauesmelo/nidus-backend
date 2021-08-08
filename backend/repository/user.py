@@ -2,7 +2,6 @@ from backend.models.preferences import PreferencesInsert
 from backend.models.users import UserInsert
 from backend.repository.base import BaseRepository
 from backend.schemas import Preferences, Users
-from sqlalchemy import insert
 
 
 class UserRepository(BaseRepository):
