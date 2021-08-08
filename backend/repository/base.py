@@ -18,3 +18,7 @@ class BaseRepository:
         self.session.add(obj_to_insert)
         self.session.commit()
         return obj_to_insert.id
+
+    def update(self, table: Table, row_id: int, values: Dict[str, Any]) -> None:
+        self.session.query(table).filter(table.id == row_id).update(values)
+        self.session.commit()
