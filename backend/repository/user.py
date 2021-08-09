@@ -10,9 +10,10 @@ class UserRepository(BaseRepository):
 
     def __init__(self) -> None:
         self.preferences_repository = PreferencesRepository()
+        super().__init__()
 
     def create(self, user: UserInsert, preferences: PreferencesInsert) -> UserInsert:
         return self.insert(
             self.table,
-            dict(**user.dict(), preferencias_id=self.preferences_repository.create(preferences.dict())),
+            dict(**user.dict(), preferencias_id=self.preferences_repository.create(preferences)),
         )
