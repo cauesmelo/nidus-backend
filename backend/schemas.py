@@ -1,36 +1,44 @@
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
-from sqlalchemy.sql.functions import current_timestamp
+from sqlalchemy.sql.functions import now, current_timestamp
 from sqlalchemy.sql.sqltypes import TIMESTAMP, Boolean
 
 Base = declarative_base()
 
 
-class Users(Base):
-    __tablename__ = "usuario"
-    id = Column(Integer, primary_key=True)
-    tw_id = Column(Integer)
-    tw_handle = Column(Integer)
-    tw_token = Column(Integer)
-    apelido_usuario = Column(Integer)
-    email = Column(String)
-    registrado_em = Column(TIMESTAMP)
-    preferencias_id = Column(
-        ForeignKey("preferencias.id", name="usuario_preferencias_id_fk"), nullable=False, index=True
+class User(Base):
+    __tablename__ = "user"
+    id = Column(String, primary_key=True)
+    tw_id = Column(String)
+    tw_name = Column(String)
+    tw_access_token = Column(String)
+    tw_access_token_verifier = Column(String)
+    tw_profile_picture = Column(String)
+    tw_email = Column(String)
+    created_at = Column(TIMESTAMP, server_default=now())
+    settings_id = Column(
+        ForeignKey("settings.id", name="settings_fk"), nullable=False, index=True
     )
 
 
-class Preferences(Base):
-    __tablename__ = "preferencias"
+class Settings(Base):
+    __tablename__ = "settings"
+    id = Column(String, primary_key=True)
+    note = Column(Boolean, default=True)
+    task = Column(Boolean, default=True)
+    reminder = Column(Boolean, default=True)
+    email = Column(Boolean, default=False)
+    push = Column(Boolean, default=True)
 
-    id = Column(Integer, primary_key=True)
-    integ_anotacoes = Column(Integer)
-    integ_tarefas = Column(Integer)
-    integ_lembretes = Column(Integer)
-    integ_email = Column(Integer)
-    integ_push = Column(Integer)
-
+class Session(Base):
+    __tablename__ = "session"
+    id = Column(String, primary_key=True)
+    user_id = Column(ForeignKey("user.id", name="user_fk"), nullable=False, index=True)
+    access_token = Column(String)
+    active = Column(Boolean, default=True)
+    created_at = Column(TIMESTAMP, server_default=now())
+    end_at = Column(TIMESTAMP)
 
 class RegisterType(Base):
     __tablename__ = "tipo_registro"
