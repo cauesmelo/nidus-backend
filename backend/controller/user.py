@@ -16,7 +16,7 @@ API_SECRET_KEY = os.getenv('API_SECRET_KEY')
 
 
 @router.get("/request-token")
-async def request_token(callback_url: str):
+async def request_token():
     auth = tweepy.OAuthHandler(API_KEY, API_SECRET_KEY)
     return auth._get_request_token()
 
@@ -46,10 +46,11 @@ session_repository: SessionRepository = Depends()
                 tw_access_token=access_token,
                 tw_access_token_verifier=verifier,
                 tw_profile_picture=getattr(me, 'profile_image_url'),
-                tw_email=getattr(me, 'email'),
-                settings_id=settings_repository.create(SettingsInsert(id=uuid4()))
+                tw_email=getattr(me, 'email')
         )
         user_repository.create(user)
+        settings_repository.create(SettingsInsert(id=uuid4(), user_id=getattr(user, 'id')))
+
 
     session = SessionInsert(
         id=uuid4(),
@@ -60,8 +61,4 @@ session_repository: SessionRepository = Depends()
 
     session_repository.create(session)
 
-    return user, session
-
-    
-        
-        
+    return dict(userData=user, session=session)
