@@ -1,6 +1,6 @@
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import joinedload, lazyload, relationship
 from sqlalchemy.sql.functions import now, current_timestamp
 from sqlalchemy.sql.sqltypes import TIMESTAMP, Boolean
 
@@ -17,9 +17,6 @@ class User(Base):
     tw_profile_picture = Column(String)
     tw_email = Column(String)
     created_at = Column(TIMESTAMP, server_default=now())
-    settings_id = Column(
-        ForeignKey("settings.id", name="settings_fk"), nullable=False, index=True
-    )
 
 
 class Settings(Base):
@@ -30,11 +27,14 @@ class Settings(Base):
     reminder = Column(Boolean, default=True)
     email = Column(Boolean, default=False)
     push = Column(Boolean, default=True)
+    user_id = Column(
+        ForeignKey("user.id", name="settings_user_fk"), nullable=False, index=True
+    )
 
 class Session(Base):
     __tablename__ = "session"
     id = Column(String, primary_key=True)
-    user_id = Column(ForeignKey("user.id", name="user_fk"), nullable=False, index=True)
+    user_id = Column(ForeignKey("user.id", name="session_user_fk"), nullable=False, index=True)
     access_token = Column(String)
     active = Column(Boolean, default=True)
     created_at = Column(TIMESTAMP, server_default=now())

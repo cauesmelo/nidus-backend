@@ -9,3 +9,4 @@ class SettingsInsert(BaseModel):
     reminder: Optional[bool]
     email: Optional[bool]
     push: Optional[bool]
+    user_id: UUID
