@@ -17,7 +17,7 @@ class User(Base):
     tw_profile_picture = Column(String)
     tw_email = Column(String)
     created_at = Column(TIMESTAMP, server_default=now())
-    settings = relationship("Settings", backref="user")
+    settings = relationship("Settings", backref="user", lazy='joined')
 
 
 class Settings(Base):

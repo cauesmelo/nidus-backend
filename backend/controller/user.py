@@ -1,65 +1,27 @@
-import tweepy
-import os
-from uuid import uuid4
-from backend.models.user import UserInsert
-from backend.models.settings import SettingsInsert
-from backend.models.session import SessionInsert
 from backend.repository.user import UserRepository
-from backend.repository.settings import SettingsRepository
 from backend.repository.session import SessionRepository
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Header
 
 router = APIRouter(prefix="/user")
 
-API_KEY = os.getenv('API_KEY')
-API_SECRET_KEY = os.getenv('API_SECRET_KEY')
-
-
-@router.get("/request-token")
-async def request_token():
-    auth = tweepy.OAuthHandler(API_KEY, API_SECRET_KEY)
-    return auth._get_request_token()
-
-
-@router.get("/access-token")
-async def access_token(oauth_token: str, oauth_token_secret: str, 
-oauth_verifier: str, user_repository: UserRepository = Depends(),
-settings_repository: SettingsRepository = Depends(),
+@router.get("/")
+async def get_user(user_id: str,
+authorization: str = Header(None),
+user_repository: UserRepository = Depends(),
 session_repository: SessionRepository = Depends()
 ):
-    auth = tweepy.OAuthHandler(API_KEY, API_SECRET_KEY)
-    auth.request_token = {
-        'oauth_token': oauth_token,
-        'oauth_token_secret': oauth_token_secret
-    }
-    access_token, verifier = auth.get_access_token(verifier=oauth_verifier)
-    api = tweepy.API(auth)
-    me = api.verify_credentials(include_email=True)
+    if(session_repository.validate(authorization[7:], user_id)):
+        return user_repository.find_by_id(user_id)
+    return dict(error="Invalid token.")
 
-    user = user_repository.find_by_email(getattr(me, 'email'))
-
-    if(user == None):
-        user_id = uuid4()
-        user_repository.create(UserInsert(
-                id=user_id,
-                tw_id=getattr(me, 'id'),
-                tw_name=getattr(me, 'name'),
-                tw_access_token=access_token,
-                tw_access_token_verifier=verifier,
-                tw_profile_picture=getattr(me, 'profile_image_url'),
-                tw_email=getattr(me, 'email')
-        ))
-        settings_repository.create(SettingsInsert(id=uuid4(), user_id=user_id))
-        user = user_repository.find_by_id(user_id)
-
-
-    session = SessionInsert(
-        id=uuid4(),
-        access_token=uuid4(),
-        active=True,
-        user_id=getattr(user, 'id')
-        )
-
-    session_repository.create(session)
-
-    return dict(userData=user, session=session)
+# @router.get("/")
+# async def get(
+# request: Request
+# ) -> None:
+#   # print(user_id)
+# #   print(getattr(request, 'headers'))
+#   print(request.__dict__)
+#     # if(session_repository.validate(access_token=access_token, 
+#     #   user_id=user_id) == False):
+#     #   return dict(error="Invalid token provided.")
+#     # return settings_repository.get(user_id)

@@ -38,3 +38,15 @@ CREATE TABLE `session` (
 	KEY `session_user_fk` (`user_id`),
 	CONSTRAINT `session_user_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `notes` (
+	`id` varchar(255) NOT NULL,
+    `user_id` varchar(255) NOT NULL,
+    `access_token` varchar(255) NOT NULL,
+    `active` boolean NOT NULL,
+    `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `end_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY (`id`),
+	KEY `session_user_fk` (`user_id`),
+	CONSTRAINT `session_user_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
