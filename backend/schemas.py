@@ -17,6 +17,7 @@ class User(Base):
     tw_profile_picture = Column(String)
     tw_email = Column(String)
     created_at = Column(TIMESTAMP, server_default=now())
+    settings = relationship("Settings", backref="user")
 
 
 class Settings(Base):
@@ -27,9 +28,7 @@ class Settings(Base):
     reminder = Column(Boolean, default=True)
     email = Column(Boolean, default=False)
     push = Column(Boolean, default=True)
-    user_id = Column(
-        ForeignKey("user.id", name="settings_user_fk"), nullable=False, index=True
-    )
+    user_id = Column(String, ForeignKey("user.id"),  unique=True)
 
 class Session(Base):
     __tablename__ = "session"

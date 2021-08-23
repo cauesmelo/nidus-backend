@@ -10,3 +10,12 @@ class SettingsInsert(BaseModel):
     email: Optional[bool]
     push: Optional[bool]
     user_id: UUID
+
+class Settings(BaseModel):
+    id: UUID
+    note: bool
+    task: bool
+    reminder: bool
+    email: bool
+    push: bool
+    user_id: UUID
