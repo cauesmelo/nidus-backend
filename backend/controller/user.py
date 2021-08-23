@@ -1,12 +1,15 @@
-import tweepy
-from backend.models.preferences import PreferencesInsert
-from backend.models.users import UserInsert
 from backend.repository.user import UserRepository
-from fastapi import APIRouter, Depends
+from backend.repository.session import SessionRepository
+from fastapi import APIRouter, Depends, Header
 
 router = APIRouter(prefix="/user")
 
-
-@router.post("/create")
-async def create(user: UserInsert, preferences: PreferencesInsert, user_repository: UserRepository = Depends()) -> int:
-    return user_repository.create(user, preferences)
+@router.get("/")
+async def get_user(user_id: str,
+authorization: str = Header(None),
+user_repository: UserRepository = Depends(),
+session_repository: SessionRepository = Depends()
+):
+    if(session_repository.validate(authorization[7:], user_id)):
+        return user_repository.find_by_id(user_id)
+    return dict(error="Invalid token.")

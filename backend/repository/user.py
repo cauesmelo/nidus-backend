@@ -1,19 +1,26 @@
-from backend.models.preferences import PreferencesInsert
-from backend.models.users import UserInsert
+from backend.models.user import UserInsert, User
 from backend.repository.base import BaseRepository
-from backend.repository.preferences import PreferencesRepository
-from backend.schemas import Users
+from backend.schemas import Settings, User
+from uuid import UUID
 
 
 class UserRepository(BaseRepository):
-    table = Users
+    table = User
 
     def __init__(self) -> None:
-        self.preferences_repository = PreferencesRepository()
         super().__init__()
 
-    def create(self, user: UserInsert, preferences: PreferencesInsert) -> UserInsert:
+    def create(self, user: UserInsert) -> UUID:
         return self.insert(
             self.table,
-            dict(**user.dict(), preferencias_id=self.preferences_repository.create(preferences)),
+            dict(**user.dict()),
         )
+
+    # TODO: Verify why join is not working
+    def find_by_email(self, email: str) -> User:
+        return self.session.query(self.table)\
+            .filter(self.table.tw_email==email).first()
+
+    def find_by_id(self, id: str) -> User:
+        return self.session.query(self.table).join(self.table.settings).filter(self.table.id==id).first()
+            
