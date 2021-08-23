@@ -39,17 +39,18 @@ session_repository: SessionRepository = Depends()
     user = user_repository.find_by_email(getattr(me, 'email'))
 
     if(user == None):
-        user = UserInsert(
-                id=uuid4(),
+        user_id = uuid4()
+        user_repository.create(UserInsert(
+                id=user_id,
                 tw_id=getattr(me, 'id'),
                 tw_name=getattr(me, 'name'),
                 tw_access_token=access_token,
                 tw_access_token_verifier=verifier,
                 tw_profile_picture=getattr(me, 'profile_image_url'),
                 tw_email=getattr(me, 'email')
-        )
-        user_repository.create(user)
-        settings_repository.create(SettingsInsert(id=uuid4(), user_id=getattr(user, 'id')))
+        ))
+        settings_repository.create(SettingsInsert(id=uuid4(), user_id=user_id))
+        user = user_repository.find_by_id(user_id)
 
 
     session = SessionInsert(

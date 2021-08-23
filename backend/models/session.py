@@ -11,3 +11,9 @@ class SessionInsert(BaseModel):
 
 class SessionEnd(BaseModel):
     id: UUID
+
+class Session(BaseModel):
+    id: UUID
+    user_id: UUID
+    access_token: UUID
+    active: bool
