@@ -12,3 +12,12 @@ class SessionRepository(BaseRepository):
 
     def end_session(self, session_id: UUID) -> bool:
         return self.update(self.table, session_id, dict(end_at=datetime.utcnow))
+
+    def validate(self, access_token: UUID, user_id: UUID) -> bool:
+        token = self.session.query(self.table)\
+            .filter(self.table.access_token==access_token).first()
+
+        if(token != None and token.user_id == user_id and token.active == True):
+            return True
+        
+        return False
