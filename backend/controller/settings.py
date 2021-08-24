@@ -1,25 +1,30 @@
-from fastapi import APIRouter
+from backend.repository.session import SessionRepository
+from backend.models.settings import Settings
+from backend.repository.settings import SettingsRepository
+from fastapi import APIRouter, Depends, Header, Request
 
 router = APIRouter(prefix="/settings")
 
 
-# @router.post("/update")
-# async def update(
-#     user_id: int, preferences: PreferencesUpdate, preferences_repository: PreferencesRepository = Depends()
-# ) -> None:
-#     preferences_repository.update_preferences(user_id, preferences)
+@router.put("/")
+async def update(
+    settings: Settings,
+    authorization: str = Header(None),
+    settings_repository: SettingsRepository = Depends(),
+    session_repository: SessionRepository = Depends()
+) -> Settings:
+    if(session_repository.validate(authorization, settings.user_id)):
+        return settings_repository.update_settings(settings)
+    return dict(error="Invalid token.")
 
-# @router.get("/")
-# async def get(
-# user_id: str,
-# auth: str,
-# settings_repository: SettingsRepository = Depends(),
-# session_repository: SessionRepository = Depends()
-# ) -> Settings:
-#   # print(user_id)
-#   print(auth)
-#     # if(session_repository.validate(access_token=access_token, 
-#     #   user_id=user_id) == False):
-#     #   return dict(error="Invalid token provided.")
-#     # return settings_repository.get(user_id)
+@router.get("/")
+async def get(user_id: str,
+authorization: str = Header(None),
+settings_repository: SettingsRepository = Depends(),
+session_repository: SessionRepository = Depends()
+):
+    if(session_repository.validate(authorization, user_id)):
+        return settings_repository.find_by_user_id(user_id)
+    return dict(error="Invalid token.")
 
+    
