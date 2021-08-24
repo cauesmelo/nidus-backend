@@ -16,11 +16,11 @@ class UserRepository(BaseRepository):
             dict(**user.dict()),
         )
 
-    # TODO: Verify why join is not working
     def find_by_email(self, email: str) -> User:
         return self.session.query(self.table)\
             .filter(self.table.tw_email==email).first()
 
     def find_by_id(self, id: str) -> User:
-        return self.session.query(self.table).join(self.table.settings).filter(self.table.id==id).first()
+        return self.session.query(self.table).join(self.table.settings)\
+            .filter(self.table.id==id).first()
             
