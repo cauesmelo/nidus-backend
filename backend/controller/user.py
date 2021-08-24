@@ -5,11 +5,11 @@ from fastapi import APIRouter, Depends, Header
 router = APIRouter(prefix="/user")
 
 @router.get("/")
-async def get_user(user_id: str,
+async def get(user_id: str,
 authorization: str = Header(None),
 user_repository: UserRepository = Depends(),
 session_repository: SessionRepository = Depends()
 ):
-    if(session_repository.validate(authorization[7:], user_id)):
+    if(session_repository.validate(authorization, user_id)):
         return user_repository.find_by_id(user_id)
     return dict(error="Invalid token.")
