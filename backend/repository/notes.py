@@ -1,7 +1,6 @@
 from backend.models.notes import NoteModel
 from backend.repository.base import BaseRepository
 from backend.schemas import Note
-from uuid import UUID
 
 class NotesRepository(BaseRepository):
     table = Note
