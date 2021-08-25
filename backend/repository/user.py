@@ -28,4 +28,3 @@ class UserRepository(BaseRepository):
     def find_by_id(self, id: str) -> User:
         return self.session.query(self.table).join(self.table.settings)\
             .filter(self.table.id==id).first()
-            
