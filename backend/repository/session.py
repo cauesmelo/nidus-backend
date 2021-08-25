@@ -24,4 +24,5 @@ class SessionRepository(BaseRepository):
             if(str(token.user_id) == str(user_id) and token.active == True):
                 return True
         
+        print('Invalid credentials provided.')
         return False
