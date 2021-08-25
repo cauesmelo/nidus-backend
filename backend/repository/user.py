@@ -16,6 +16,11 @@ class UserRepository(BaseRepository):
             dict(**user.dict()),
         )
 
+    def get_credentials(self, user_id: str):
+        user = self.session.query(self.table)\
+            .filter(self.table.id==user_id).first()
+        return user.tw_access_token, user.tw_access_token_verifier
+
     def find_by_email(self, email: str) -> User:
         return self.session.query(self.table)\
             .filter(self.table.tw_email==email).first()

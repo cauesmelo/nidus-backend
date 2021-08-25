@@ -1,8 +1,8 @@
-from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy import Column, ForeignKey, String
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import joinedload, lazyload, relationship
-from sqlalchemy.sql.functions import now, current_timestamp
-from sqlalchemy.sql.sqltypes import DATETIME, TIMESTAMP, Boolean
+from sqlalchemy.orm import relationship
+from sqlalchemy.sql.functions import now
+from sqlalchemy.sql.sqltypes import TIMESTAMP, Boolean
 
 Base = declarative_base()
 

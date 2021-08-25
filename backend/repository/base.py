@@ -3,7 +3,7 @@ from typing import Any, Dict
 from uuid import UUID
 
 from sqlalchemy import Table, create_engine
-from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy.orm import sessionmaker
 
 # DATABASE_URL: str = environ.get("CLEARDB_DATABASE_URL", "mysql://root:1234@127.0.0.1:3306/nidus")
 
@@ -25,3 +25,12 @@ class BaseRepository:
         self.session.query(table).filter(table.id == id).update(values)
         self.session.commit()
         return True
+
+    def insert_and_return(self, table: Table, values: Dict[str, Any]):
+        obj_to_insert = table(**values)
+        self.session.add(obj_to_insert)
+        self.session.commit()
+        # GAMBIARRA FOI FEITA
+        # CORRIGE AQUI POR FAVOR VITAO
+        return self.session.query(table)\
+            .filter(table.id==obj_to_insert.id).first()
