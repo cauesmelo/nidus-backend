@@ -31,8 +31,8 @@ class Settings(Base):
     note = Column(Boolean, default=True)
     task = Column(Boolean, default=True)
     reminder = Column(Boolean, default=True)
-    email = Column(Boolean, default=False)
-    push = Column(Boolean, default=True)
+    email = Column(Boolean, default=True)
+    push = Column(Boolean, default=False)
     user_id = Column(String, ForeignKey("user.id"),  unique=True)
 
 
