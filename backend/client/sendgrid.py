@@ -15,3 +15,4 @@ class SendgridClient:
         content = Content("text/plain", body)
         mail = Mail(self.from_email, To(to), subject, content)
         return self.client.client.mail.send.post(request_body=mail.get())
+

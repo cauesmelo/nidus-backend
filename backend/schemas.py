@@ -2,7 +2,7 @@ from sqlalchemy import Column, ForeignKey, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.functions import now
-from sqlalchemy.sql.sqltypes import TIMESTAMP, Boolean
+from sqlalchemy.sql.sqltypes import TIMESTAMP, Boolean, DateTime
 
 Base = declarative_base()
 
@@ -10,6 +10,7 @@ Base = declarative_base()
 class User(Base):
     __tablename__ = "user"
     id = Column(String, primary_key=True)
+    phone = Column(String)
     tw_id = Column(String)
     tw_name = Column(String)
     tw_access_token = Column(String)
@@ -60,7 +61,7 @@ class Reminder(Base):
     tweet_id = Column(String)
     user_id = Column(String, ForeignKey("user.id"),  unique=True, index=True)
     content = Column(String)
-    date = Column(TIMESTAMP)
+    date = Column(DateTime)
     created_at = Column(TIMESTAMP, server_default=now())
 
 
@@ -78,4 +79,5 @@ class Task(Base):
     __tablename__ = "tasks"
     id = Column(String, primary_key=True)
     tasklist_id = Column(String, ForeignKey("tasklists.id"),  unique=True, index=True)
+    complete = bool
     content = Column(String)

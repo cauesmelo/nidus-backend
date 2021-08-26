@@ -4,6 +4,7 @@ USE `nidus`;
 
 CREATE TABLE `user` (
     `id` VARCHAR(255) NOT NULL,
+	`phone` VARCHAR(255),
     `tw_id` VARCHAR(255) NOT NULL,
     `tw_name` VARCHAR(255),
     `tw_access_token` VARCHAR(255) NOT NULL,
@@ -20,8 +21,8 @@ CREATE TABLE `settings` (
     `note` BOOLEAN NOT NULL DEFAULT TRUE,
     `task` BOOLEAN NOT NULL DEFAULT TRUE,
     `reminder` BOOLEAN NOT NULL DEFAULT TRUE,
-    `email` BOOLEAN NOT NULL DEFAULT FALSE,
-    `push` BOOLEAN NOT NULL DEFAULT TRUE,
+    `email` BOOLEAN NOT NULL DEFAULT TRUE,
+    `push` BOOLEAN NOT NULL DEFAULT FALSE,
     PRIMARY KEY (`id`),
     KEY `settings_user_fk` (`user_id`),
     CONSTRAINT `settings_user_fk` FOREIGN KEY (`user_id`)
@@ -81,6 +82,7 @@ CREATE TABLE `tasklists` (
 CREATE TABLE `tasks` (
     `id` VARCHAR(255) NOT NULL,
     `tasklist_id` VARCHAR(255) NOT NULL,
+    `complete` BOOL NOT NULL DEFAULT FALSE,
     `content` VARCHAR(300) NOT NULL,
     PRIMARY KEY (`id`),
     KEY `tasks_tasklists_fk` (`tasklist_id`),

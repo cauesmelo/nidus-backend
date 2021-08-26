@@ -8,6 +8,9 @@ class SessionRepository(BaseRepository):
     table = Session
 
     def create(self, session: SessionInsert) -> UUID:
+        # TODO: Precisa colocar active como falso
+        # Para todos que corresponderem ao id do usuario e depois criar
+        # Para evitar que exista mais de um token valido por user
         return self.insert(self.table, session.dict())
 
     def end_session(self, session_id: UUID) -> bool:
@@ -17,6 +20,7 @@ class SessionRepository(BaseRepository):
         if(access_token == None or user_id == None):
             return False
         
+        # TODO: Precisa retornar somente token que estiver válido
         token = self.session.query(self.table)\
             .filter(self.table.access_token==access_token[7:]).first()
         
