@@ -68,5 +68,11 @@ async def post(
     return tasklists_repository.find_by_id(tasklist.id)
 
 @router.get("/")
-async def get(user_id: str, tasklists_repository: TasklistsRepository = Depends()):
+async def get(user_id: str, 
+tasklists_repository: TasklistsRepository = Depends()):
   return tasklists_repository.find_by_user_id(user_id)
+
+@router.delete("/")
+async def delete(tasklist_id: str, 
+tasklists_repository: TasklistsRepository = Depends()):
+  return tasklists_repository.delete_by_id(tasklist_id)

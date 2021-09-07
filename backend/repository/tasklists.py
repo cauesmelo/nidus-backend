@@ -16,3 +16,9 @@ class TasklistsRepository(BaseRepository):
     def find_by_user_id(self, user_id: UUID):
         return self.session.query(self.table)\
             .filter(self.table.user_id==user_id).all()
+
+    def delete_by_id(self, id: UUID) -> bool:
+        self.session.query(self.table)\
+            .filter(self.table.id==id).delete()
+        self.session.commit()
+        return True

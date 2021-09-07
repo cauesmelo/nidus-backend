@@ -87,5 +87,5 @@ CREATE TABLE `tasks` (
     PRIMARY KEY (`id`),
     KEY `tasks_tasklists_fk` (`tasklist_id`),
     CONSTRAINT `tasks_tasklists_fk` FOREIGN KEY (`tasklist_id`)
-        REFERENCES `tasklists` (`id`)
+        REFERENCES `tasklists` (`id`) ON DELETE CASCADE
 )  ENGINE=INNODB DEFAULT CHARSET=UTF8MB4;
