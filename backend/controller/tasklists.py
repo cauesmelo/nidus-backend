@@ -48,21 +48,20 @@ async def post(
         complete=False,
         content=task
       ))
+    else: 
+      tasklist = tasklists_repository.create(TasklistModel(
+        id=uuid4(),
+        user_id=user_id,
+        content=tasklist_insert.content,
+      ))
 
-
-    tasklist = tasklists_repository.create(TasklistModel(
-      id=uuid4(),
-      user_id=user_id,
-      content=tasklist_insert.content,
-    ))
-
-    for task in tasklist_insert.tasks:
-      tasks_repository.create(TaskModel(
-      id=uuid4(),
-      tasklist_id=tasklist.id,
-      complete=False,
-      content=task
-    ))
+      for task in tasklist_insert.tasks:
+        tasks_repository.create(TaskModel(
+        id=uuid4(),
+        tasklist_id=tasklist.id,
+        complete=False,
+        content=task
+      ))
 
 
     return tasklists_repository.find_by_id(tasklist.id)
